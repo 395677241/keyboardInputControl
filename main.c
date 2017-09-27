@@ -1,21 +1,27 @@
 #include <stdio.h>
+#include <pthread.h>
 
 int g_keyValue;
-void * keyboardInputControl()
+static void * keyboardInputControl()
 {
-	scanf(&g_keyValue,"%d"); //scanf will block current thread, so we must use it in another thread.
+	while(1)
+		scanf("%d", &g_keyValue); //scanf will block current thread, so we must use it in another thread.
+	return NULL;
 }
 
 int main()
 {
+	pthread_t pth_id;
+	pthread_create(&pth_id, NULL, keyboardInputControl, NULL);
 
-	pthread_create(keyboardInputControl);
 	while(1) {
 		//...
 		if (g_keyValue == 1) {
+			printf("Current keyboard setting is %d.\n", g_keyValue);
 			//do sth special.
 		}
 		else if (g_keyValue == 2) {
+			printf("Current keyboard setting is %d.\n", g_keyValue);
 			//do sth special.
 		}
 		else
